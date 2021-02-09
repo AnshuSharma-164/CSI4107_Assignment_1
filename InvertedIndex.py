@@ -1,49 +1,57 @@
+"""
+The file contains the inverted index class. The inverted index
+structure is used through this assignment for easier indexing and 
+Retrieval and Ranking.
+Author: Anshu Sharma
+"""
 class InvertedIndex:
 
-	def __init__ (self, index=[]):
-		self.index = index
+	"""
+	This is the constructor for the inverted index class.
+	"""
+	def __init__ (self):
+		self.index = {}
 
-
+	"""
+	TODO: comment
+	"""
 	def __repr__ (self):
 		text = self.showIndex()
 		return text
 
-
+	"""
+	TODO: comment
+	"""
 	def __str__ (self):
 		text = self.showIndex()
 		return text
 
-
+	"""
+	TODO: to be re-implimented to show the first few values of the index
+	and not the entire index.
+	"""
 	def showIndex(self):
-		text = ""
-		for wordPair in self.index:
-			text = text+wordPair[0]
-			for idPair in wordPair[1]:
-				text = text + " " + str(idPair[0])+":"+str(idPair[1])
-			text = text+"\n"
-		return text
+		return str(self.index)
 
-
+	"""
+	Insert token to the inverted index.
+	"""
 	def insertToken(self, token, tweetId):
-		tokenInIndex = False
-		for item in self.index:
-			if(token==item[0]):
-				self.addId(item[1], tweetId)
-				tokenInIndex = True
-		if(tokenInIndex==False):
-			self.index.append( (token, [ (tweetId, 1) ]) )
+		if token in self.index:
+			if tweetId in self.index[token]:
+				self.index[token][tweetId] += 1
+			else:
+				self.index[token][tweetId] = 1
+		else:
+			self.index[token] = { tweetId:1 }
 
+	"""
+	Insert an list of token with same tweet Id
+	into the inverted index.
+	"""
 	def insertTokenList(self, tokenList, tweetId):
 		for token in tokenList:
 			self.insertToken(token, tweetId)
 
 
-	def addId(self, IdList, tweetId):
-		IdInList = False
-		for pair in IdList:
-			if ( tweetId == pair[0] ):
-				pair[1] = pair[1]+1
-				IdInList = True
-		if(IdInList==False):
-			IdList.append((tweetId,1))
 
