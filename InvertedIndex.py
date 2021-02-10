@@ -143,3 +143,5 @@ class InvertedIndex:
 	def rankedRetrieval(self, query):
 		return 2#do
 		#loop through ever tweetId in idList and find cosine similarity
+
+
