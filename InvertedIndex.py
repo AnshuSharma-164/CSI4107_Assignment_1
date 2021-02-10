@@ -12,7 +12,6 @@ class InvertedIndex:
 	"""
 	def __init__ (self):
 		self.index = {}
-		#UGLY CODE THAT RUINS MY DAY!
 		self.idList = set()
 		self.N = len(self.idList)
 
@@ -61,31 +60,32 @@ class InvertedIndex:
 
 
 	def idf(self, token):
-		if token in index.keys():
+		if token in self.index.keys():
 			return math.log(self.N/len(self.index[token]), 2)
 		else:
 			return 0
 
-	###########################################
-	#Finish Tomorrow                          #
-	###########################################
+
 	def normalizeTf(self, token, tweetId):
 		maxTf = 0
-		for tf in self.index[token].values():
-			if tf>maxTf:
-				maxTf = tf
+		for key in self.index.keys():
+			if tweetId in self.index[key].keys() and maxTf < self.index[key][tweetId]:
+				maxTf = self.index[key][tweetId]
 		return self.index[token][tweetId]/maxTf
+
+
+	def queryTf(self, token, query):
+		return query.count(token)/query.count(max(set(query), key = query.count))
 
 
 	def documentWeight(self, token, tweetId):
 		return self.normalizeTf(token, tweetId)*self.idf(token)
 
-	def queryWeight(self, token):
-		return 2#do
 
-	def maxTf(self);
-		return 2#do
+	def queryWeight(self, token, query):
+		return (0.5+0.5*self.queryTf(token, query))*self.idf(token)
 
-	def cosineSim(self, Query):
+
+	def cosineSim(self, query):
 		return 2#do
 
