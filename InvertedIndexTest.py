@@ -93,10 +93,14 @@ q.append( test.queryWeight("times", ["new", "new", "times"]) )
 q.append( test.queryWeight("york", ["new", "new", "times"]) )
 print(q)
 
+print("COSINESIM TEST START\n")
 c = test.cosineSim(["new", "new", "times"], "d1")
+
 for t in c:
 	print(t)
 	print("\n")
+
+print("COSINESIM TEST END \n")
 
 
 print("\n test 2 \n")
