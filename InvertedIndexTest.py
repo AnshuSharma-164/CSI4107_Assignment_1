@@ -94,11 +94,12 @@ q.append( test.queryWeight("york", ["new", "new", "times"]) )
 print(q)
 
 print("COSINESIM TEST START\n")
+
+#cos_sim = np.dot(doc_vector,query_vector)/(np.linalg.norm(doc_vector)*np.linalg.norm(query_vector))
+
 c = test.cosineSim(["new", "new", "times"], "d1")
 
-for t in c:
-	print(t)
-	print("\n")
+print(c)
 
 print("COSINESIM TEST END \n")
 
