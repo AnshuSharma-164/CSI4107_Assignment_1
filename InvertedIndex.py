@@ -149,7 +149,11 @@ class InvertedIndex:
 		#loop through every tweetId in idList and find cosine similarity
 		for tweetId in self.idList:
 			rankedResults.append((tweetId, self.cosineSim(query, tweetId)))
+		
 		#Sort HERE
+		rankedResults.sort(key=lambda x: x[1])
+
+		rankedResults.reverse()
 
 		return rankedResults
 		
