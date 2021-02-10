@@ -93,6 +93,12 @@ q.append( test.queryWeight("times", ["new", "new", "times"]) )
 q.append( test.queryWeight("york", ["new", "new", "times"]) )
 print(q)
 
+c = test.cosineSim(["new", "new", "times"], "d1")
+for t in c:
+	print(t)
+	print("\n")
+
+
 print("\n test 2 \n")
 
 test_2 = InvertedIndex.InvertedIndex()
