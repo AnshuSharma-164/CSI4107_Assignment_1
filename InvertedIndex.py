@@ -118,7 +118,10 @@ class InvertedIndex:
 	tf_q-idf which is used for the weighting.
 	"""
 	def queryWeight(self, token, query):
-		return (0.5+0.5*self.queryTf(token, query))*self.idf(token) #calls helper function define above and multiply together.
+		if token in query:
+			return (0.5+0.5*self.queryTf(token, query))*self.idf(token) #calls helper function define above and multiply together.
+		else:
+			return 0
 
 	##########
 	# STEP 3 #
@@ -135,21 +138,18 @@ class InvertedIndex:
 				query_vector.append( self.queryWeight(token, query) )
 			else:
 				query_vector.append(0)
-
 		#cosine similarity formula using py
 		cos_sim = np.dot(doc_vector,query_vector)/(np.linalg.norm(doc_vector)*np.linalg.norm(query_vector))
-
 		return cos_sim
 		#return [doc_vector, query_vector]
 
 	def rankedRetrieval(self, query):
 
 		rankedResults = []
-
 		#loop through every tweetId in idList and find cosine similarity
 		for tweetId in self.idList:
-
 			rankedResults.append((tweetId, self.cosineSim(query, tweetId)))
+		#Sort HERE
 
 		return rankedResults
 		
