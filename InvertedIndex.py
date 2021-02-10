@@ -5,6 +5,9 @@ structure is used through this assignment for easier indexing and
 Retrieval and Ranking.
 Author: Anshu Sharma
 """
+##########
+# STEP 2 #
+##########
 class InvertedIndex:
 
 	"""
@@ -45,12 +48,12 @@ class InvertedIndex:
 	def insertToken(self, token, tweetId):
 		self.idList.add(tweetId) #update set of tweetId's 
 		self.N = len(self.idList) #update the size of the set of tweetId's
-		if token in self.index:
+		if token in self.index: #if token token is in index already updates the token's value dictionary
 			if tweetId in self.index[token]:
 				self.index[token][tweetId] += 1
 			else:
 				self.index[token][tweetId] = 1
-		else:
+		else: #else add token to the index.
 			self.index[token] = { tweetId:1 }
 
 	"""
@@ -58,7 +61,7 @@ class InvertedIndex:
 	into the inverted index.
 	"""
 	def insertTokenList(self, tokenList, tweetId):
-		for token in tokenList:
+		for token in tokenList: #loops throught the list of token calling the insertToken function.
 			self.insertToken(token, tweetId)
 
 	"""
@@ -72,31 +75,53 @@ class InvertedIndex:
 		else: #returns 0 otherwise.
 			return 0.0
 
-
+	"""
+	Helper function to normalize document term frequency.
+	This function takes in a token and tweetId then normalize
+	the token's term frequency to tweet that's connected to the 
+	tweetId.
+	"""
 	def normalizeTf(self, token, tweetId):
-		if tweetId in self.index[token]:
-			maxTf = 0
-			for key in self.index:
+		if tweetId in self.index[token]:#checks if word was written in the tweet connected to tweetId.
+			maxTf = 0 #finds frequency of the most common term from the tweet connected to tweetId.
+			for key in self.index: #checks every word in the index to find the most common in the document.
 				if tweetId in self.index[key] and maxTf < self.index[key][tweetId]:
 					maxTf = self.index[key][tweetId]
 			return self.index[token][tweetId]/maxTf
 		else:
 			return 0.0
 
-
+	"""
+	Helper function for the queryWeight function.
+	takes in a token and the query then calculates
+	the token's normalized term frequency in the query.
+	"""
 	def queryTf(self, token, query):
-		return query.count(token)/query.count(max(set(query), key = query.count))
+		return query.count(token)/query.count(max(set(query), key = query.count)) #term frequency of token in query / term frequency for the most frequent term in query
 
-
+	"""
+	Function to obtain the weight of a token for a given
+	document in the inverted index. This function takes
+	attribute token and tweetId and calls two helper functions
+	to comput the tf-idf.
+	"""
 	def documentWeight(self, token, tweetId):
-		return self.normalizeTf(token, tweetId)*self.idf(token)
+		return self.normalizeTf(token, tweetId)*self.idf(token) #calls helper function define above and multiply together.
 
-
+	"""
+	Function to obtain weight of a token in a given query.
+	The function calls two helper function to calculate the
+	tf_q-idf which is used for the weighting.
+	"""
 	def queryWeight(self, token, query):
-		return (0.5+0.5*self.queryTf(token, query))*self.idf(token)
+		return (0.5+0.5*self.queryTf(token, query))*self.idf(token) #calls helper function define above and multiply together.
+
+	##########
+	# STEP 3 #
+	##########
 
 
-	def cosineSim(self, query):
+	def cosineSim(self, query, tweetId):
 		return 2#do
 
 	def rankedRetrieval(self, query):
