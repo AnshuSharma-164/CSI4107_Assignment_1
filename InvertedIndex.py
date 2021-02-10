@@ -97,8 +97,11 @@ class InvertedIndex:
 	the token's normalized term frequency in the query.
 	"""
 	def queryTf(self, token, query):
-		return query.count(token)/query.count(max(set(query), key = query.count)) #term frequency of token in query / term frequency for the most frequent term in query
-
+		if token in query:
+			return query.count(token)/query.count(max(set(query), key = query.count)) #term frequency of token in query / term frequency for the most frequent term in query
+		else:
+			return 0.0
+			
 	"""
 	Function to obtain the weight of a token for a given
 	document in the inverted index. This function takes
