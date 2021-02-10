@@ -16,7 +16,6 @@ data = pd.read_csv(tweets, sep="\t", header=None, error_bad_lines=False) #tweets
 
 stopWordsList.columns = ["words"]#set column name
 data.columns = ["tweetID", "tweet"]#set column names
-data.insert(2,"tokens", 1,allow_duplicates=True)#create token row
 tweetList = data.loc[:,"tweet"]#create token array
 tweetID = data.loc[:,"tweetID"]#create tweet ID
 stops = stopWordsList.loc[:,"words"]#create stopword array
@@ -34,9 +33,7 @@ for tweet in tweetList:
         if word not in stopWordsList.values: # only add to output non-stopwords
             tweetTokensCopy.append(word)
     tokenArray.append(tweetTokensCopy) #add tweet tokens to output
-
-# print(tokenArray)
-# data.to_excel('output1.xlsx', engine='xlsxwriter')
+# print(tokenArray)#for test purposes 
 
 
 """
