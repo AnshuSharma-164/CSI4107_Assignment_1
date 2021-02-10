@@ -14,15 +14,17 @@ print(test)
 x = []
 x.append(test.idf("angeles"))
 x.append(test.idf("los"))
-x.append(test.idf("times"))
-x.append(test.idf("times"))
+x.append(test.idf("new"))
+x.append(test.idf("post"))
 x.append(test.idf("times"))
 x.append(test.idf("york"))
 print(x)
 
 y = test.normalizeTf("times" , "d1")
-print(y)
+#print(y)
 
 z = test.documentWeight("times", "d1")
-print(z)
+#print(z)
 
+q = test.queryWeight("times", ["new", "new", "times"])
+print(q)
