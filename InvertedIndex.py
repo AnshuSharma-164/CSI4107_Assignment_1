@@ -1,3 +1,4 @@
+
 import numpy as np
 """
 The file contains the inverted index class. The inverted index
@@ -123,10 +124,10 @@ class InvertedIndex:
 	# STEP 3 #
 	##########
 
-
 	def cosineSim(self, query, tweetId):
 		doc_vector = []
 		query_vector = []
+		
 		for token in self.index:
 			doc_vector.append( self.documentWeight(token, tweetId) ) 
 		for token in self.index:
@@ -134,14 +135,21 @@ class InvertedIndex:
 				query_vector.append( self.queryWeight(token, query) )
 			else:
 				query_vector.append(0)
-		return [doc_vector, query_vector]
+
 		#cosine similarity formula using py
+		cos_sim = np.dot(doc_vector,query_vector)/(np.linalg.norm(doc_vector)*np.linalg.norm(query_vector))
 
-
-
+		return cos_sim
+		#return [doc_vector, query_vector]
 
 	def rankedRetrieval(self, query):
-		return 2#do
-		#loop through ever tweetId in idList and find cosine similarity
 
+		rankedResults = []
 
+		#loop through every tweetId in idList and find cosine similarity
+		for tweetId in self.idList:
+
+			rankedResults.append((tweetId, self.cosineSim(query, tweetId)))
+
+		return rankedResults
+		
