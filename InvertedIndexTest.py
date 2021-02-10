@@ -1,5 +1,7 @@
 import InvertedIndex
 
+print("Test 1 \n")
+
 test = InvertedIndex.InvertedIndex()
 
 test.insertToken("new" , "d1")
@@ -11,7 +13,7 @@ test.insertToken("post" , "d2")
 test.insertTokenList(["los", "angeles", "times"] , "d3")
 print(test)
 
-print("\n")
+print("idf scores \n")
 
 x = []
 x.append(test.idf("angeles"))
@@ -22,7 +24,7 @@ x.append(test.idf("times"))
 x.append(test.idf("york"))
 print(x)
 
-print("\n")
+print("\n document tf idf\n")
 
 y = []
 y_1 = []
@@ -80,7 +82,7 @@ z_3.append( test.documentWeight("york" , "d3") )
 z.append(z_3)
 for l in z: print(l)
 
-print("\n")
+print("\n query tf idf \n")
 
 q = []
 q.append( test.queryWeight("angeles", ["new", "new", "times"]) )
@@ -90,3 +92,14 @@ q.append( test.queryWeight("post", ["new", "new", "times"]) )
 q.append( test.queryWeight("times", ["new", "new", "times"]) )
 q.append( test.queryWeight("york", ["new", "new", "times"]) )
 print(q)
+
+print("\n test 2 \n")
+
+test_2 = InvertedIndex.InvertedIndex()
+
+test_2.insertTokenList(["new", "new", "times"] , "d")
+
+a = test_2.normalizeTf("new" , "d")
+b = test_2.normalizeTf("times" , "d")
+
+print([a,b])
