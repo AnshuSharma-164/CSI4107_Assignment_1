@@ -101,7 +101,7 @@ class InvertedIndex:
 			return query.count(token)/query.count(max(set(query), key = query.count)) #term frequency of token in query / term frequency for the most frequent term in query
 		else:
 			return 0.0
-			
+
 	"""
 	Function to obtain the weight of a token for a given
 	document in the inverted index. This function takes
@@ -125,7 +125,21 @@ class InvertedIndex:
 
 
 	def cosineSim(self, query, tweetId):
-		return 2#do
+		doc_vector = []
+		query_vector = []
+		for token in self.index:
+			doc_vector.append( self.documentWeight(token, tweetId) ) 
+		for token in self.index:
+			if token in query:
+				query_vector.append( self.queryWeight(token, query) )
+			else:
+				query_vector.append(0)
+		return [doc_vector, query_vector]
+		#cosine similarity formula using py
+
+
+
 
 	def rankedRetrieval(self, query):
 		return 2#do
+		#loop through ever tweetId in idList and find cosine similarity
