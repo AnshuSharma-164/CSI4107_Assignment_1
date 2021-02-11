@@ -25,8 +25,8 @@ tweetList = data.loc[:,"tweet"]#create token array
 tweetID = data.loc[:,"tweetID"]#create tweet ID
 stops = stopWordsList.loc[:,"words"]#create stopword array
 
-tweetList = tweetList[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-tweetID = tweetID[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# tweetList = tweetList[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# tweetID = tweetID[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 tokenArray = []
 tweetTokensCopy = []
@@ -63,14 +63,18 @@ score = the computed degree of match between the segment and the topic
 tag = a unique identifier you chose for this run (same for every topic).
 """
 def WriteDownResults(query,topic_id,resultFile):
+    print("start of WriteDownResults")
     queryResults = corpusInvertedIndex.rankedRetrieval(query)#get all match scores and what tweet IDs they are connected to
+    print("trim list top 1000")
     queryResults = queryResults[:999]# trim list to 1000 results
+    print("before for loop")
 
     counter=0
     for (theTweetID,score) in queryResults:
         counter+=1
         topic_id, Q0, docno, rank, score, tag = topic_id, "Q0", theTweetID, counter, score, query[0]#setting all variables
         resultFile.write("{}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))#formating and writing to file
+        print("{}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))
     resultFile.write("\n\n")
     # topic_id=None
     # query=None
@@ -85,13 +89,16 @@ line = queryFile.readline()#read line of query file
 resultFile = open("Results.txt", "w")#open results file to write results
 while line:#loop through getting the queries and the query number
     line = queryFile.readline()#read a new line
-    topic_id = re.search('<num> Number: (.*) </num>',line,re.IGNORECASE)
+    
+    topic_id_search = re.search('<num> Number: (.*) </num>',line,re.IGNORECASE)
     query = re.search('<title>(.*)</title>',line,re.IGNORECASE)
-    if topic_id:
-        topic_id = topic_id.group(1)
+    if topic_id_search:
+        topic_id = topic_id_search.group(1)
     if query:
         query = query.group(1)
         query = tknzr.tokenize(query)
+        print(query)
+        print(topic_id)
         WriteDownResults(query,topic_id,resultFile)
     
     
