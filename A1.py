@@ -25,8 +25,8 @@ tweetList = data.loc[:,"tweet"]#create token array
 tweetID = data.loc[:,"tweetID"]#create tweet ID
 stops = stopWordsList.loc[:,"words"]#create stopword array
 
-tweetList = tweetList[0:10]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-tweetID = tweetID[0:10]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+tweetList = tweetList[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+tweetID = tweetID[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 tokenArray = []
 tweetTokensCopy = []
@@ -40,7 +40,7 @@ for tweet in tweetList:
         if word not in stopWordsList.values: # only add to output non-stopwords
             tweetTokensCopy.append(word)
     tokenArray.append(tweetTokensCopy) #add tweet tokens to output
-print(tokenArray)#for test purposes 
+# print(tokenArray)#for test purposes 
 
 
 """
@@ -54,19 +54,6 @@ for i in range(len(tweetID)):
 ##########
 # STEP 4 #
 ##########
-
-# make queries
-counter=0
-queryList = []
-queryFileAddress = "topics_MB1-49.txt"
-queryFile = open(queryFileAddress, "r")
-line = queryFile.readline()
-
-
-
-#write the file
-resultFile = open("Results.txt", "w")
-
 #write the top 1000 results
 """
 topic_id = the topic/query number (use the numbers, such a 1 instead of MB001)
@@ -75,9 +62,46 @@ docno = the tweet id, rank is the rank assigned by your system to the segment (1
 score = the computed degree of match between the segment and the topic
 tag = a unique identifier you chose for this run (same for every topic).
 """
-topic_id, Q0, docno, rank, score, tag = 0, 0, 0, 0, 0, 0
-resultFile.write("{}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))
+def WriteDownResults(query,topic_id,resultFile):
+    queryResults = corpusInvertedIndex.rankedRetrieval(query)#get all match scores and what tweet IDs they are connected to
+    queryResults = queryResults[:999]# trim list to 1000 results
+
+    counter=0
+    for (theTweetID,score) in queryResults:
+        counter+=1
+        topic_id, Q0, docno, rank, score, tag = topic_id, "Q0", theTweetID, counter, score, query[0]#setting all variables
+        resultFile.write("{}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))#formating and writing to file
+    resultFile.write("\n\n")
+    # topic_id=None
+    # query=None
+
+
+# make queries
+counter=0
+queryList = []
+queryFileAddress = "topics_MB1-49.txt"#address of queries
+queryFile = open(queryFileAddress, "r")#open the query file
+line = queryFile.readline()#read line of query file
+resultFile = open("Results.txt", "w")#open results file to write results
+while line:#loop through getting the queries and the query number
+    line = queryFile.readline()#read a new line
+    topic_id = re.search('<num> Number: (.*) </num>',line,re.IGNORECASE)
+    query = re.search('<title>(.*)</title>',line,re.IGNORECASE)
+    if topic_id:
+        topic_id = topic_id.group(1)
+    if query:
+        query = query.group(1)
+        query = tknzr.tokenize(query)
+        WriteDownResults(query,topic_id,resultFile)
+    
+    
 
 
 
 resultFile.close()
+
+#write the file
+
+
+
+
