@@ -100,9 +100,6 @@ while line:#loop through getting the queries and the query number
         print(query)
         print(topic_id)
         WriteDownResults(query,topic_id,resultFile)
-    
-    
-
 
 
 resultFile.close()
