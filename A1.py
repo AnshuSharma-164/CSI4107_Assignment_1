@@ -10,7 +10,7 @@ import InvertedIndex
 # STEP 1 #
 ##########
 
-
+print("starting preprocessing")
 stopwords = "StopWords.txt" #list stop words
 tweets = "Trec_microblog11.txt" #txt of the original tweets
 
@@ -46,11 +46,12 @@ for tweet in tweetList:
 """
 add all tweetID and tweets to the Inverted Index
 """
+print("adding to inverted index")
 corpusInvertedIndex = InvertedIndex.InvertedIndex()
 for i in range(len(tweetID)):
     corpusInvertedIndex.insertTokenList(tokenArray[i],tweetID[i])
 
-
+print("testing queries")
 ##########
 # STEP 4 #
 ##########

@@ -84,11 +84,11 @@ class InvertedIndex:
 	"""
 	def normalizeTf(self, token, tweetId):
 		if tweetId in self.index[token]:#checks if word was written in the tweet connected to tweetId.
-			maxTf = 0 #finds frequency of the most common term from the tweet connected to tweetId.
-			for key in self.index: #checks every word in the index to find the most common in the document.
-				if tweetId in self.index[key] and maxTf < self.index[key][tweetId]:
-					maxTf = self.index[key][tweetId]
-			return self.index[token][tweetId]/maxTf
+			#maxTf = 0 #finds frequency of the most common term from the tweet connected to tweetId.
+			#for key in self.index: #checks every word in the index to find the most common in the document.
+			#	if tweetId in self.index[key] and maxTf < self.index[key][tweetId]:
+			#		maxTf = self.index[key][tweetId]
+			return self.index[token][tweetId]
 		else:
 			return 0.0
 
@@ -118,8 +118,8 @@ class InvertedIndex:
 	tf_q-idf which is used for the weighting.
 	"""
 	def queryWeight(self, token, query):
-		if token in query:
-			return (0.5+0.5*self.queryTf(token, query))*self.idf(token) #calls helper function define above and multiply together.
+		if token in self.index and token in query:
+			return self.queryTf(token, query)*self.idf(token) #calls helper function define above and multiply together.
 		else:
 			return 0
 
@@ -127,28 +127,64 @@ class InvertedIndex:
 	# STEP 3 #
 	##########
 
-	def cosineSim(self, query, tweetId):
-		doc_vector = []
-		query_vector = []
-		
-		for token in self.index:
-			doc_vector.append( self.documentWeight(token, tweetId) ) 
-		for token in self.index:
-			if token in query:
-				query_vector.append( self.queryWeight(token, query) )
-			else:
-				query_vector.append(0)
+	def cosineSim(self, query, tweetId, tweetnorm):
+
+		dot_product = 0
+		query_norm = 0
+		for token in query:
+			query_frequency = 0
+			doc_frequency = 0
+			query_frequency  = self.queryTf(token, query)
+			if token in self.index:
+				doc_frequency = self.normalizeTf(token, tweetId)
+			idf = self.idf(token)
+			dot_product = dot_product + (query_frequency*doc_frequency*idf*idf)
+			query_norm = query_norm + (query_frequency*idf)**2
+		query_norm = np.sqrt(query_norm)
+		document_norm = np.sqrt(tweetnorm[tweetId])
+
+
 		#cosine similarity formula using py
-		cos_sim = np.dot(doc_vector,query_vector)/(np.linalg.norm(doc_vector)*np.linalg.norm(query_vector))
+		cos_sim = 0
+		if document_norm!=0:
+			cos_sim = dot_product/(query_norm*document_norm)
 		return cos_sim
 		#return [doc_vector, query_vector]
 
 	def rankedRetrieval(self, query):
 
+		data = {}
+		query_normsqr = 0
+		for token in self.index:
+
+			idf = np.log2(self.N/len(self.index[token]))
+
+			tf_q = 0
+			if token in query:
+				tf_q = query.count(token)
+				query_normsqr += (tf_q*idf)**2 
+
+
+			for tweetId in self.index[token]:
+				tf_d  = self.index[token][tweetId]
+				if tweetId in data:
+					data[tweetId][0] += tf_d*tf_q*(idf**2)
+					data[tweetId][1] += (tf_d*idf)**2
+				else:
+					data[tweetId] = [tf_d*tf_q*(idf**2) , (tf_d*idf)**2]
+
+		query_norm = np.sqrt(query_normsqr)
 		rankedResults = []
+		for i in data:
+			document_norm = np.sqrt(data[i][1])
+			if query_norm!=0:
+				cos_sim = data[i][0]/(query_norm*document_norm)
+			else:
+				cos_sim = 0
+			rankedResults.append((i, cos_sim))
 		#loop through every tweetId in idList and find cosine similarity
-		for tweetId in self.idList:
-			rankedResults.append((tweetId, self.cosineSim(query, tweetId)))
+		#for tweetId in self.idList:
+		#	rankedResults.append((tweetId, self.cosineSim(query, tweetId, document_normsqr)))
 		
 		#Sort HERE
 		rankedResults.sort(key=lambda x: x[1])
