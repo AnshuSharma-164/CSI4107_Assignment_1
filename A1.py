@@ -101,6 +101,8 @@ while line:#loop through getting the queries and the query number
     if query:
         query = query.group(1)
         query = tknzr.tokenize(query)
+        for word in query:
+            word = word.lower()
         # print(query)
         # print("sssss" + topic_id)
         WriteDownResults(query,topic_id,resultFile)
