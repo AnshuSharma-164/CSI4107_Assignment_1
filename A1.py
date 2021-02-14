@@ -74,7 +74,7 @@ def WriteDownResults(query,topic_id,resultFile):
     for (theTweetID,score) in queryResults:
         counter+=1
         topic_id, Q0, docno, rank, score, tag = topic_id, "Q0", theTweetID, counter, score, "myTag"#setting all variables
-        resultFile.write("{}   {}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))#formating and writing to file
+        resultFile.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(topic_id, Q0, docno, rank, score, tag))#formating and writing to file
         # print("{}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))
     resultFile.write("\n\n")
     # topic_id=None
