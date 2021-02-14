@@ -1,5 +1,5 @@
 import pandas as pd
-import xlsxwriter
+#import xlsxwriter
 from nltk.corpus import stopwords
 from nltk.tokenize import TweetTokenizer
 import nltk
@@ -95,18 +95,16 @@ while line:#loop through getting the queries and the query number
     query = re.search('<title>(.*)</title>',line,re.IGNORECASE)
     if topic_id_search:
         topic_id = topic_id_search.group(1)
+        topic_id = topic_id[2:]
+        #print("sssss" + topic_id)
     if query:
         query = query.group(1)
         query = tknzr.tokenize(query)
         # print(query)
-        # print(topic_id)
+        # print("sssss" + topic_id)
         WriteDownResults(query,topic_id,resultFile)
 
 
 resultFile.close()
 
 #write the file
-
-
-
-
