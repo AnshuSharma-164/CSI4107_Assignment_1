@@ -64,18 +64,18 @@ score = the computed degree of match between the segment and the topic
 tag = a unique identifier you chose for this run (same for every topic).
 """
 def WriteDownResults(query,topic_id,resultFile):
-    print("start of WriteDownResults")
+    # print("start of WriteDownResults")
     queryResults = corpusInvertedIndex.rankedRetrieval(query)#get all match scores and what tweet IDs they are connected to
-    print("trim list top 1000")
+    # print("trim list top 1000")
     queryResults = queryResults[:999]# trim list to 1000 results
-    print("before for loop")
+    # print("before for loop")
 
     counter=0
     for (theTweetID,score) in queryResults:
         counter+=1
         topic_id, Q0, docno, rank, score, tag = topic_id, "Q0", theTweetID, counter, score, query[0]#setting all variables
-        resultFile.write("{}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))#formating and writing to file
-        print("{}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))
+        resultFile.write("{}   {}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))#formating and writing to file
+        # print("{}   {}   {}   {}   {}\n".format(topic_id, Q0, docno, rank, score, tag))
     resultFile.write("\n\n")
     # topic_id=None
     # query=None
@@ -98,8 +98,8 @@ while line:#loop through getting the queries and the query number
     if query:
         query = query.group(1)
         query = tknzr.tokenize(query)
-        print(query)
-        print(topic_id)
+        # print(query)
+        # print(topic_id)
         WriteDownResults(query,topic_id,resultFile)
 
 
