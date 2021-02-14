@@ -1,8 +1,6 @@
 import pandas as pd
-#import xlsxwriter
 from nltk.corpus import stopwords
 from nltk.tokenize import TweetTokenizer
-import nltk
 import re
 import InvertedIndex
 
@@ -25,8 +23,8 @@ tweetList = data.loc[:,"tweet"]#create token array
 tweetID = data.loc[:,"tweetID"]#create tweet ID
 stops = stopWordsList.loc[:,"words"]#create stopword array
 
-# tweetList = tweetList[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# tweetID = tweetID[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# tweetList = tweetList[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!
+# tweetID = tweetID[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 tokenArray = []
 tweetTokensCopy = []
@@ -35,10 +33,14 @@ for tweet in tweetList:
     tweetTokensCopy = []
     for word in tweetTokens:
         word = word.lower() #set all tweet tokens lowercase
+        word = re.sub("http(.*)","a",word) # remove links
         word = re.sub("\W+","a",word) #remove non-alphabet characters
         word = re.sub("[0-9]+","a",word) #remove numbers
+        
+        
         if word not in stopWordsList.values: # only add to output non-stopwords
             tweetTokensCopy.append(word)
+    # print(tweetTokensCopy)
     tokenArray.append(tweetTokensCopy) #add tweet tokens to output
 # print(tokenArray)#for test purposes 
 
