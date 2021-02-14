@@ -96,6 +96,7 @@ while line:#loop through getting the queries and the query number
     if topic_id_search:
         topic_id = topic_id_search.group(1)
         topic_id = topic_id[2:]
+        topic_id = topic_id.strip("0")
         #print("sssss" + topic_id)
     if query:
         query = query.group(1)
