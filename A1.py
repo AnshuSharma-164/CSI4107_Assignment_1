@@ -1,6 +1,9 @@
 import pandas as pd
+import nltk
 from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import TweetTokenizer
+
 import re
 import InvertedIndex
 
@@ -13,6 +16,9 @@ stopwords = "StopWords.txt" #list stop words
 tweets = "Trec_microblog11.txt" #txt of the original tweets
 
 tknzr = TweetTokenizer()# create tokenizer
+lmtzr = WordNetLemmatizer()
+# lemmatizer = WordNetLemmatizer()
+# print(lemmatizer.lemmatize("bats"))
 
 stopWordsList = pd.read_csv(stopwords, sep="\n", header=None, error_bad_lines=False) #stopwords dataset
 data = pd.read_csv(tweets, sep="\t", header=None, error_bad_lines=False) #tweets dataset
@@ -27,27 +33,28 @@ stops = stopWordsList.loc[:,"words"]#create stopword array
 # tweetID = tweetID[0:1000]#TODO TEMPORARY TEST SET!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 tokenArray = []
-tweetTokensCopy = []
 for tweet in tweetList:
     tweetTokens = tknzr.tokenize(tweet) # tokenize tweets
+    tweetTokens = nltk.word_tokenize(tweet)
+    
     tweetTokensCopy = []
     for word in tweetTokens:
         word = word.lower() #set all tweet tokens lowercase
         word = re.sub("http(.*)","a",word) # remove links
+        word = re.sub("[0-9]*","a",word) #remove numbers
         word = re.sub("\W+","a",word) #remove non-alphabet characters
-        word = re.sub("[0-9]+","a",word) #remove numbers
-        
         
         if word not in stopWordsList.values: # only add to output non-stopwords
             tweetTokensCopy.append(word)
+    #print(tweetTokensCopy)
+    # for index, value in enumerate(tweetTokensCopy):
+    #     tweetTokensCopy[index] = lmtzr.lemmatize(value)
     # print(tweetTokensCopy)
     tokenArray.append(tweetTokensCopy) #add tweet tokens to output
 # print(tokenArray)#for test purposes 
 
 
-"""
-add all tweetID and tweets to the Inverted Index
-"""
+#add all tweetID and tweets to the Inverted Index
 print("adding to inverted index")
 corpusInvertedIndex = InvertedIndex.InvertedIndex()
 for i in range(len(tweetID)):
@@ -99,12 +106,10 @@ while line:#loop through getting the queries and the query number
         topic_id = topic_id_search.group(1)
         topic_id = topic_id[2:]
         topic_id = topic_id.lstrip("0")
-        #print("sssss" + topic_id)
     if query:
         query = query.group(1)
         query = tknzr.tokenize(query)
         # print(query)
-        # print("sssss" + topic_id)
         WriteDownResults(query,topic_id,resultFile)
 
 
