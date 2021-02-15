@@ -3,8 +3,8 @@
 CSI4107 - Assignment 1 README
 
 Theo Van der Burgt	300019142
-Ariane Poserio	300011641
-Anshu Sharma	300011600
+Ariane Poserio		300011641
+Anshu Sharma		300011600
 
 -------------------------------------------------------------------------------------------------------------------------------
 Work Division
