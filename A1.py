@@ -56,6 +56,7 @@ for i in range(len(tweetID)):
 print("vocabulary of Inverted Index is " +str(corpusInvertedIndex.vocabSize()))
 print("Here is a sample size of words in the Inverted Index")
 corpusInvertedIndex.tokenSample(100)
+print("\n")
 
 print("Testing queries")
 ##########
