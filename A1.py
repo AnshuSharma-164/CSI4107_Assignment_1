@@ -32,16 +32,17 @@ for tweet in tweetList:
     tweetTokens = tknzr.tokenize(tweet) # tokenize tweets
     tweetTokensCopy = []
     for word in tweetTokens:
-        word = word.lower() #set all tweet tokens lowercase
+        #word = word.lower() #set all tweet tokens lowercase
         word = re.sub("http(.*)","a",word) # remove links
         word = re.sub("\W+","a",word) #remove non-alphabet characters
-        word = re.sub("[0-9]+","a",word) #remove numbers
+        #word = re.sub("[0-9]+","a",word) #remove numbers
         
         
         if word not in stopWordsList.values: # only add to output non-stopwords
             tweetTokensCopy.append(word)
     # print(tweetTokensCopy)
     tokenArray.append(tweetTokensCopy) #add tweet tokens to output
+
 # print(tokenArray)#for test purposes 
 
 
@@ -52,8 +53,11 @@ print("adding to inverted index")
 corpusInvertedIndex = InvertedIndex.InvertedIndex()
 for i in range(len(tweetID)):
     corpusInvertedIndex.insertTokenList(tokenArray[i],tweetID[i])
+print("vocabulary of Inverted Index is " +str(corpusInvertedIndex.vocabSize()))
+print("Here is a sample size of words in the Inverted Index")
+corpusInvertedIndex.tokenSample(100)
 
-print("testing queries")
+print("Testing queries")
 ##########
 # STEP 4 #
 ##########

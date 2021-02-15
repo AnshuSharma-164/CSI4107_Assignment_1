@@ -123,6 +123,15 @@ class InvertedIndex:
 		else:
 			return 0
 
+	def vocabSize(self):
+		return len(self.index)
+
+	def tokenSample(self, size):
+		wordList = list(self.index.keys())
+		for i in range(size):
+			print(wordList[i])
+
+
 	##########
 	# STEP 3 #
 	##########
