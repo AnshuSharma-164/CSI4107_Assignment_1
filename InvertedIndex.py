@@ -12,6 +12,14 @@ Author: Anshu Sharma
 class InvertedIndex:
 
 	"""
+	This is the constructor for the inverted index class.
+	"""
+	def __init__ (self):
+		self.index = {}
+		self.idList = set()
+		self.N = len(self.idList)
+
+	"""
 	Insert token to the inverted index.
 	"""
 	def insertToken(self, token, tweetId):
@@ -60,18 +68,22 @@ class InvertedIndex:
 	"""
 	def rankedRetrieval(self, query):
 
+		#Data create a dictionary of elements used to find the norm
+		#and dot product for specific tweetID to generate it's cosine Similarity
 		data = {}
 		query_normsqr = 0
 		for token in self.index:
 
+			#Generate IDF for token in Index
 			idf = np.log2(self.N/len(self.index[token]))
 
+			#Find query term frequency
 			tf_q = 0
 			if token in query:
 				tf_q = query.count(token)
 				query_normsqr += (tf_q*idf)**2 
 
-
+			#Fill up data dictionary
 			for tweetId in self.index[token]:
 				tf_d  = self.index[token][tweetId]
 				if tweetId in data:
@@ -83,6 +95,7 @@ class InvertedIndex:
 		query_norm = np.sqrt(query_normsqr)
 		rankedResults = []
 
+		#generate Cosine sim for all tweets from data dictionary and query_nrom
 		for i in data:
 			document_norm = np.sqrt(data[i][1])
 			if query_norm!=0:
@@ -93,8 +106,5 @@ class InvertedIndex:
 		
 		#Sort HERE
 		rankedResults.sort(key=lambda x: x[1])
-
 		rankedResults.reverse()
-
-		return rankedResults
-		
+		return rankedResults	
