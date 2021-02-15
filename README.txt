@@ -21,10 +21,11 @@ Run File Instructions
 -------------------------------------------------------------------------------------------------------------------------------
 On your windows machine, download the code from github and using the command prompt, change directory to the assignment folder.
 
-Once inside the CSI4107_Assignment_1 folder, run the following command to load the assignment
+Once inside the CSI4107_Assignment_1 folder, run the following command to load the assignment:
 
 	Python A1.py
 
+The file should then run and display the required results
 
 -------------------------------------------------------------------------------------------------------------------------------
 Explanation of Algorithm and Samples
@@ -109,9 +110,9 @@ Takes query, topic_id, and resultFile as inputs and writes the top 1000 of the q
 STEP 5 
 #################
 
-After running the trec_eval script, using the command
+After running the trec_eval script, using the command:
 
-trec_eval Relevance.txt Results.txt
+	trec_eval Relevance.txt Results.txt
 
 we received the following results with an overall MAP score of 17% accuracy
 
